@@ -562,16 +562,18 @@
       /* ── Utility ── */
       ".rh-hidden{display:none}",
       ".rh-disabled{opacity:.45;pointer-events:none;user-select:none}",
-      ".rh-btn.global-active{background:var(--blue);color:#fff}",
+      ".rh-btn.global-active{background:var(--blue) !important;color:#fff !important}",
+      ".rh-btn.global-inactive{background:#e0e1e2 !important;color:rgba(0,0,0,.6) !important}",
       ".rh-divider{border:none;border-top:1px solid var(--border);margin:.8em 0}",
       ".rh-cf-fields{display:grid;grid-template-columns:1fr 1fr;gap:.6em}",
 
       /* ── Details/summary ── */
       ".rh-details{margin-top:.6em}",
-      ".rh-details summary{cursor:pointer;font-size:.95rem;font-weight:700;color:var(--link);padding:.3em 0;user-select:none;list-style:none}",
-      ".rh-details summary::-webkit-details-marker{display:none}",
-      ".rh-details summary::before{content:'\\25B6';display:inline-block;font-size:.6em;margin-right:.5em;transition:transform .2s ease;position:relative;top:-.1em}",
-      ".rh-details[open] summary::before{transform:rotate(90deg)}",
+      ".rh-details summary{cursor:pointer;font-size:.95rem;font-weight:700;color:var(--link);padding:.3em 0;user-select:none;list-style:none !important}",
+      ".rh-details summary::marker{display:none !important;content:'' !important;font-size:0 !important}",
+      ".rh-details summary::-webkit-details-marker{display:none !important}",
+      ".rh-details summary::before{content:'' !important;display:inline-block !important;width:0 !important;height:0 !important;border-style:solid !important;border-width:.35em 0 .35em .5em !important;border-color:transparent transparent transparent var(--link) !important;margin-right:.5em !important;transition:transform .2s ease !important;vertical-align:middle !important;position:relative !important;top:0 !important}",
+      ".rh-details[open] summary::before{transform:rotate(90deg) !important}",
       ".rh-details summary:hover{color:#1e70bf;text-decoration:underline}",
       ".rh-details[open] summary{margin-bottom:.5em}",
 
@@ -956,8 +958,10 @@
       var checked = container.querySelectorAll(".rh-region-cb:checked");
       if (checked.length === 0) {
         $globalBtn.classList.add("global-active");
+        $globalBtn.classList.remove("global-inactive");
       } else {
         $globalBtn.classList.remove("global-active");
+        $globalBtn.classList.add("global-inactive");
       }
     }
     // Initial state: global is active (no regions selected)
