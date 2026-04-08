@@ -1,0 +1,10 @@
+services:
+  widget-demo:
+    image: nginx:1.27-alpine
+    ports:
+      - "8088:80"
+    restart: unless-stopped
+    volumes:
+      - ../dist:/usr/share/nginx/html/dist:ro
+      - ../demo:/usr/share/nginx/html/demo:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

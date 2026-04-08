@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fix Power Automate + Cloudflare — Reenhanced</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+      /* Simulate a reenhanced.com WordPress page environment */
+      *,*::before,*::after{box-sizing:border-box}
+      body {
+        margin: 0;
+        font-family: 'Noto Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background: #fff;
+        color: rgba(0,0,0,.87);
+        line-height: 1.5;
+      }
+
+      .site-header {
+        background: #1b1c1d;
+        color: rgba(255,255,255,.9);
+        padding: 1em 2em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .site-header .logo {
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: .5px;
+        color: #fff;
+        text-decoration: none;
+      }
+      .site-header nav a {
+        color: rgba(255,255,255,.7);
+        text-decoration: none;
+        margin-left: 1.5em;
+        font-size: .9rem;
+      }
+      .site-header nav a:hover { color: #fff; }
+
+      .page-content {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1.5rem 3rem;
+      }
+
+      .site-footer {
+        background: #333;
+        color: rgba(255,255,255,.6);
+        text-align: center;
+        padding: 2.5em 1em;
+        font-size: .85rem;
+      }
+      .site-footer a { color: rgba(255,255,255,.7); text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <!-- Simulated site header -->
+    <header class="site-header">
+      <a class="logo" href="https://reenhanced.com">reenhanced</a>
+      <nav>
+        <a href="https://reenhanced.com/products/">Products</a>
+        <a href="https://reenhanced.com/services/">Services</a>
+        <a href="https://reenhanced.com/contact/">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Page content area — this is where the widget embeds -->
+    <main class="page-content">
+      <div id="reenhanced-m365-cf-widget"></div>
+    </main>
+
+    <!-- Simulated site footer -->
+    <footer class="site-footer">
+      <p>Reenhanced LLC &middot; 2455 Swamp Creek Road, Green Lane, PA 18054 &middot; <a href="tel:215-804-9408">215-804-9408</a></p>
+    </footer>
+
+    <script src="/dist/m365-cloudflare-widget.js"></script>
+    <script>
+      window.ReenhancedM365CFWidget.init({
+        target: "#reenhanced-m365-cf-widget"
+      });
+    </script>
+  </body>
+</html>
