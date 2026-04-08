@@ -568,7 +568,10 @@
 
       /* ── Details/summary ── */
       ".rh-details{margin-top:.6em}",
-      ".rh-details summary{cursor:pointer;font-size:.95rem;font-weight:700;color:var(--link);padding:.3em 0;user-select:none}",
+      ".rh-details summary{cursor:pointer;font-size:.95rem;font-weight:700;color:var(--link);padding:.3em 0;user-select:none;list-style:none}",
+      ".rh-details summary::-webkit-details-marker{display:none}",
+      ".rh-details summary::before{content:'\\25B6';display:inline-block;font-size:.6em;margin-right:.5em;transition:transform .2s ease;position:relative;top:-.1em}",
+      ".rh-details[open] summary::before{transform:rotate(90deg)}",
       ".rh-details summary:hover{color:#1e70bf;text-decoration:underline}",
       ".rh-details[open] summary{margin-bottom:.5em}",
 
