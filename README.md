@@ -4,6 +4,8 @@ Allow **Power Automate** and **Logic Apps** traffic through your Cloudflare fire
 
 Built by [Reenhanced](https://reenhanced.com) — the world's best solution for WordPress + Microsoft.
 
+**Live tool:** <https://reenhanced.com/power-automate-cloudflare/>
+
 ## What it does
 
 1. Click **Fetch Latest Service Tags** — the widget auto-downloads the latest Azure Service Tags JSON from Microsoft through a lightweight proxy.
