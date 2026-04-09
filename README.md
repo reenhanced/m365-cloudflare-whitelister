@@ -1,41 +1,58 @@
-# Reenhanced — Azure → Cloudflare Whitelister
+# Reenhanced — Fix Power Automate + Cloudflare
 
-Allow **Power Automate** and **Logic Apps** traffic through your Cloudflare firewall.
+**Is Cloudflare blocking your Power Automate flows from reaching your website?** This free tool fixes that.
+
+It creates ready-to-use firewall rules that tell Cloudflare to let Microsoft Power Automate (and Logic Apps) traffic through. You can hand the instructions to your IT team, or apply them yourself if you have Cloudflare access.
 
 Built by [Reenhanced](https://reenhanced.com) — the world's best solution for WordPress + Microsoft.
 
-**Live tool:** <https://reenhanced.com/power-automate-cloudflare/>
+**Use the live tool now:** <https://reenhanced.com/power-automate-cloudflare/>
 
-## What it does
+## The problem
 
-1. Click **Fetch Latest Service Tags** — the widget auto-downloads the latest Azure Service Tags JSON from Microsoft through a lightweight proxy.
-2. Select service tags (**AzureConnectors**, **AzureCloud**) and optionally specific Azure regions.
-3. Preview the exact Cloudflare rules, IP ranges, curl commands, and manual instructions.
-4. **Copy the preview** and hand it to a technical resource — or apply directly to Cloudflare from the widget.
+When you connect Power Automate to a website that uses Cloudflare (a popular security service), Cloudflare often blocks the connection because it doesn't recognize Microsoft's servers. Your flows fail, webhooks don't fire, and HTTP requests time out.
 
-Manual file upload is available as a fallback if the proxy is unavailable.
+The fix is to tell Cloudflare "these IP addresses belong to Microsoft — let them through." Microsoft publishes a list of these IP addresses, but the list is long, technical, and changes every week. This tool handles all of that for you.
 
-No backend, no server calls except to Microsoft (via proxy) and directly to Cloudflare when you choose to apply. The Azure Service Tags file is processed entirely in your browser.
+## How it works
 
-## Quick start
+The tool walks you through four simple steps:
 
-### Option A — Docker
+1. **Get the latest IP addresses** — Click one button and the tool downloads the current list of Microsoft IP addresses automatically.
+2. **Choose what to allow** — The default selection (Power Automate & Connectors) is right for most people. Just leave it as-is.
+3. **Get instructions for your IT team** — The tool creates a complete set of instructions you can copy and paste into an email or Teams message. Your IT team gets everything they need: the IP addresses, step-by-step Cloudflare dashboard instructions, and an API command for advanced users.
+4. **Apply directly (optional)** — If you manage Cloudflare yourself, you can apply the rules directly from the tool. You'll need your Cloudflare API Token and Zone ID.
+
+After you're done, the tool offers a **calendar reminder** so you can re-run it monthly — Microsoft updates these IP addresses regularly.
+
+## Privacy and security
+
+- **Everything happens in your browser.** The IP address list is downloaded from Microsoft, and all processing happens locally. Nothing is sent to any third-party server.
+- **Cloudflare credentials are optional.** You only need them if you choose to apply rules directly. The copy-and-send workflow needs no credentials at all.
+- **Credentials stay local.** If you save your Cloudflare credentials, they're stored only in your browser's local storage. You can clear them at any time.
+- **This project is open-source.** You can audit every line of code in this repository.
+
+## Try it locally
+
+### Option A — Docker (easiest)
+
+If you have [Docker](https://www.docker.com/products/docker-desktop/) installed:
 
 ```bash
 cd demo
 docker compose up -d
 ```
 
-Open <http://localhost:8088>. The included nginx config provides the CORS proxy at `/api/ms-download/` so auto-fetch works out of the box.
+Then open <http://localhost:8088> in your browser. Everything works out of the box.
 
-### Option B — Any static server
+### Option B — Any web server
 
-Serve the repo root and open `demo/index.html`.
+If you already have a local web server, point it at the root of this repository and open `demo/index.html`.
 
-### Option C — Embed in WordPress
+### Option C — Embed in your own website (WordPress, etc.)
 
-1. Upload `dist/m365-cloudflare-widget.js` and `dist/proxy.php` to your WordPress theme or a public directory.
-2. Add this HTML where you want the UI to appear:
+1. Copy `dist/m365-cloudflare-widget.js` and `dist/proxy.php` to your web server.
+2. Add this snippet to the page where you want the tool to appear:
 
 ```html
 <div id="reenhanced-m365-cf-widget"></div>
@@ -48,49 +65,41 @@ Serve the repo root and open `demo/index.html`.
 </script>
 ```
 
-The `proxy.php` file acts as a CORS proxy to download.microsoft.com so the widget can auto-fetch the Service Tags JSON.
+The `proxy.php` file is a small helper that lets the tool download IP addresses from Microsoft. It's needed because browsers block direct cross-site downloads for security reasons (CORS). The Docker setup uses nginx for this instead.
 
-## Files
+## What's in this repository
 
-| File | Purpose |
-|------|---------|
-| `dist/m365-cloudflare-widget.js` | Self-contained embeddable widget (no build step needed) |
-| `dist/proxy.php` | PHP CORS proxy for WordPress / Apache deployments |
-| `demo/index.html` | Demo page that mirrors a WordPress embed |
-| `demo/docker-compose.yml` | One-command Docker demo |
-| `demo/nginx.conf` | Nginx routing config with CORS proxy |
+| File | What it does |
+|------|-------------|
+| `dist/m365-cloudflare-widget.js` | The tool itself — a single JavaScript file with no dependencies |
+| `dist/proxy.php` | A small PHP helper for WordPress / Apache servers (downloads the IP list from Microsoft) |
+| `demo/index.html` | A demo page showing the tool embedded in a web page |
+| `demo/docker-compose.yml` | Launches a local demo with one command (`docker compose up`) |
+| `demo/nginx.conf` | Web server config for the Docker demo |
+| `demo/Dockerfile` | Container build file for the Docker demo |
 
-## Data flow
+## Cloudflare requirements (only for direct apply)
 
-1. Widget auto-fetches the latest `ServiceTags_Public_*.json` from [Microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=56519) via a CORS proxy (nginx or PHP).
-2. Widget parses the file **locally** to extract AzureConnectors and/or AzureCloud CIDR ranges.
-3. User selects regions and generates a preview.
-4. Preview includes:
-   - Full list of CIDR ranges
-   - Ready-to-run `curl` command for the Cloudflare API
-   - Step-by-step manual dashboard instructions
-5. User can **copy** the preview and send it to a colleague, or **apply** directly to Cloudflare.
+If you want the tool to apply rules directly to Cloudflare (Step 4), you'll need:
 
-## Cloudflare requirements
+- A **Cloudflare API Token** with "Zone > Zone WAF" permissions — [create one here](https://dash.cloudflare.com/profile/api-tokens)
+- Your **Zone ID** — found on your domain's overview page in the [Cloudflare dashboard](https://dash.cloudflare.com)
 
-- An [API Token](https://dash.cloudflare.com/profile/api-tokens) with **Zone > Zone WAF** (or broader) permissions.
-- The Zone ID for your domain (visible on the zone overview page in Cloudflare).
-- **Credentials are only needed if you choose to apply directly.** The preview and copy features work without any credentials.
+If you don't have these, no worries — just use Step 3 to copy the instructions and send them to whoever manages your Cloudflare account.
 
-## Transparency
+## Keeping rules up to date
 
-- All processing happens locally in your browser.
-- Credentials are only stored in `localStorage` if you explicitly click "Save Credentials Locally".
-- This repository is open-source — audit it, fork it, run it locally.
+Microsoft updates their IP addresses weekly. If the addresses change and your Cloudflare rules are outdated, Power Automate may get blocked again.
 
-## Azure Service Tags reference
+We recommend **re-running this tool once a month**. The tool can add a calendar reminder for you after you generate instructions.
 
-Service Tags are updated weekly by Microsoft. Re-run this tool periodically to keep your rules current.
+## Background: what are Azure Service Tags?
 
-- Download page: <https://www.microsoft.com/en-us/download/details.aspx\?id\=56519\>
-- Documentation: <https://learn.microsoft.com/en-us/azure/virtual-network/service-tags-overview\>
+Microsoft groups their IP addresses into named sets called "Service Tags." This tool uses two of them:
 
-| Tag | What it covers |
-|-----|---------------|
-| **AzureConnectors** | Power Automate, Logic Apps, and managed connector infrastructure |
-| **AzureCloud** | All Azure datacenter IP ranges (much broader — use with caution) |
+| Tag | What it covers | Who needs it |
+|-----|---------------|-------------|
+| **AzureConnectors** | Power Automate, Logic Apps, and related connector services | Most people — this is the default and recommended choice |
+| **AzureCloud** | All Microsoft Azure IP addresses worldwide | Only use if specifically asked — this is a very large list |
+
+For more details, see Microsoft's [Service Tags documentation](https://learn.microsoft.com/en-us/azure/virtual-network/service-tags-overview) and [download page](https://www.microsoft.com/en-us/download/details.aspx?id=56519).
